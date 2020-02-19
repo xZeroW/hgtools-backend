@@ -36,8 +36,7 @@ exports.isPasswordAndUserMatch = (req, res, next) => {
                         userId: user[0]._id,
                         username: user[0].username,
                         permissionLevel: user[0].permissionLevel,
-                        provider: 'username',
-                        name: user[0].firstName + ' ' + user[0].lastName,
+                        provider: 'username'
                     };
                     return next();
                 } else {
