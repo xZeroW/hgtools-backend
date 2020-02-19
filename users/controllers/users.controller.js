@@ -4,11 +4,14 @@ const crypto = require('crypto');
 exports.insert = (req, res) => {
     let errors = [];
     if (req.body) {
+        if (!req.body.username) {
+            errors.push('Field username is required');
+        }
         if (!req.body.email) {
-            errors.push('Campo email é requerido');
+            errors.push('Field email is required');
         }
         if (!req.body.password) {
-            errors.push('Campo senha é requerido');
+            errors.push('Field password is required');
         }
 
         if (errors.length) {
@@ -16,14 +19,21 @@ exports.insert = (req, res) => {
         }
     }
 
-    let salt = crypto.randomBytes(16).toString('base64');
-    let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest("base64");
-    req.body.password = salt + "$" + hash;
-    req.body.permissionLevel = 1;
-    UserModel.createUser(req.body)
-        .then((result) => {
-            res.status(201).send({id: result._id});
+    UserModel.findByUsername(req.body.username)
+        .then((user)=>{
+            if(!user[0]){
+                let salt = crypto.randomBytes(16).toString('base64');
+                let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest("base64");
+                req.body.password = salt + "$" + hash;
+                req.body.permissionLevel = 1;
+                UserModel.createUser(req.body)
+                    .then((result) => {
+                        res.status(201).send({id: result._id});
         });
+            }else{
+                res.status(404).send({errors: 'User already exists'});
+        }
+    });  
 };
 
 exports.list = (req, res) => {

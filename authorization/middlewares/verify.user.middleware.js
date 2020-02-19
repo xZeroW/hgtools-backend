@@ -5,11 +5,11 @@ exports.hasAuthValidFields = (req, res, next) => {
     let errors = [];
 
     if (req.body) {
-        if (!req.body.email) {
-            errors.push('Email is requerid');
+        if (!req.body.username) {
+            errors.push('Username is required');
         }
         if (!req.body.password) {
-            errors.push('Password is requerid');
+            errors.push('Password is required');
         }
 
         if (errors.length) {
@@ -18,12 +18,12 @@ exports.hasAuthValidFields = (req, res, next) => {
             return next();
         }
     } else {
-        return res.status(400).send({errors: 'Email and password are required'});
+        return res.status(400).send({errors: 'Username and password are required'});
     }
 };
 
 exports.isPasswordAndUserMatch = (req, res, next) => {
-    UserModel.findByEmail(req.body.email)
+    UserModel.findByUsername(req.body.username)
         .then((user)=>{
             if(!user[0]){
                 res.status(404).send({errors: 'User not found'});
@@ -34,14 +34,14 @@ exports.isPasswordAndUserMatch = (req, res, next) => {
                 if (hash === passwordFields[1]) {
                     req.body = {
                         userId: user[0]._id,
-                        email: user[0].email,
+                        username: user[0].username,
                         permissionLevel: user[0].permissionLevel,
-                        provider: 'email',
+                        provider: 'username',
                         name: user[0].firstName + ' ' + user[0].lastName,
                     };
                     return next();
                 } else {
-                    return res.status(400).send({errors: 'Invalid Email or Password'});
+                    return res.status(400).send({errors: 'Invalid Username or Password'});
                 }
             }
         });
