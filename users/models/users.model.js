@@ -5,7 +5,7 @@ const userSchema = new Schema({
     username: String,
     email: String,
     password: String,
-    permissionLevel: Number
+    role: Number
 });
 
 userSchema.virtual('id').get(function () {

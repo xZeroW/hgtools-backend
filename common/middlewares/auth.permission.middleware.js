@@ -3,9 +3,9 @@ const jwt = require('jsonwebtoken'),
 
 const ADMIN_PERMISSION = 7;
 
-exports.minimumPermissionLevelRequired = (required_permission_level) => {
+exports.minimumRoleRequired = (required_permission_level) => {
     return (req, res, next) => {
-        let user_permission_level = parseInt(req.jwt.permissionLevel);
+        let user_permission_level = parseInt(req.jwt.role);
         if (user_permission_level >= required_permission_level) {
             return next();
         } else {
@@ -16,7 +16,7 @@ exports.minimumPermissionLevelRequired = (required_permission_level) => {
 
 exports.onlySameUserOrAdminCanDoThisAction = (req, res, next) => {
 
-    let user_permission_level = parseInt(req.jwt.permissionLevel);
+    let user_permission_level = parseInt(req.jwt.role);
     let userId = req.jwt.userId;
     if (req.params && req.params.userId && userId === req.params.userId) {
         return next();

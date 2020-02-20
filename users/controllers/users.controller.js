@@ -15,7 +15,7 @@ exports.insert = (req, res) => {
         }
 
         if (errors.length) {
-            return res.status(400).send({errors: errors.join(',')});
+            return res.send({errors});
         }
     }
 
@@ -25,13 +25,13 @@ exports.insert = (req, res) => {
                 let salt = crypto.randomBytes(16).toString('base64');
                 let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest("base64");
                 req.body.password = salt + "$" + hash;
-                req.body.permissionLevel = 1;
+                req.body.role = 1;
                 UserModel.createUser(req.body)
                     .then((result) => {
-                        res.status(201).send({id: result._id});
+                        res.status(201).send();
         });
             }else{
-                res.status(404).send({errors: 'User already exists'});
+                res.status(409).send();
         }
     });  
 };
