@@ -14,6 +14,16 @@ exports.insert = (req, res) => {
             errors.push('Field password is required');
         }
 
+        const regexEmail = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+        const regexAlphanumeric = new RegExp(/^[A-Za-z0-9_]+$/i);
+        if (!regexEmail.test(req.body.email)){
+            errors.push('Invalid email format');
+        }
+
+        if (!regexAlphanumeric.test(req.body.username)){
+            errors.push('Invalid username. Allowed characters: a-z, 0-9, _');
+        }
+
         if (errors.length) {
             return res.send({errors});
         }
