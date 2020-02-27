@@ -57,7 +57,7 @@ exports.list = (perPage, page) => {
                 } else {
                     resolve(users);
                 }
-            })
+            });
     });
 };
 
@@ -73,8 +73,7 @@ exports.patchUser = (id, userData) => {
                 resolve(updatedUser);
             });
         });
-    })
-
+    });
 };
 
 exports.removeById = (userId) => {
@@ -88,4 +87,3 @@ exports.removeById = (userId) => {
         });
     });
 };
-
