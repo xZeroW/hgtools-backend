@@ -33,17 +33,17 @@ exports.insert = (req, res) => {
         .then((user)=>{
             if(!user[0]){
                 let salt = crypto.randomBytes(16).toString('base64');
-                let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest("base64");
-                req.body.password = salt + "$" + hash;
+                let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest('base64');
+                req.body.password = salt + '$' + hash;
                 req.body.role = 1;
                 UserModel.createUser(req.body)
                     .then((result) => {
-                        res.status(201).send();
-        });
+                        res.status(201).send({ text: 'User created!' });
+                    });
             }else{
-                res.status(409).send();
-        }
-    });  
+                res.status(409).send({ message: 'User already exists' });
+            }
+        });  
 };
 
 exports.list = (req, res) => {
@@ -59,7 +59,7 @@ exports.list = (req, res) => {
         .then((result) => {
             delete result.password;
             res.status(200).send(result);
-        })
+        });
 };
 
 exports.getById = (req, res) => {
@@ -72,8 +72,8 @@ exports.getById = (req, res) => {
 exports.patchById = (req, res) => {
     if (req.body.password) {
         let salt = crypto.randomBytes(16).toString('base64');
-        let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest("base64");
-        req.body.password = salt + "$" + hash;
+        let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest('base64');
+        req.body.password = salt + '$' + hash;
     }
 
     UserModel.patchUser(req.params.userId, req.body)
