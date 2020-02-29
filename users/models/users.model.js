@@ -24,11 +24,11 @@ userSchema.findById = function (cb) {
 const User = mongoose.model('Users', userSchema);
 
 exports.findByEmail = (email) => {
-    return User.find({email: email});
+    return User.find({email});
 };
 
 exports.findByUsername = (username) => {
-    return User.find({username: username});
+    return User.find({username});
 };
 
 exports.findById = (id) => {
@@ -64,7 +64,7 @@ exports.list = (perPage, page) => {
 exports.patchUser = (id, userData) => {
     return new Promise((resolve, reject) => {
         User.findById(id, function (err, user) {
-            if (err) reject(err);
+            if (err) { reject(err); } 
             for (let i in userData) {
                 user[i] = userData[i];
             }

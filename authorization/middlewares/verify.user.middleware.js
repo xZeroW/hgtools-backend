@@ -24,7 +24,7 @@ exports.hasAuthValidFields = (req, res, next) => {
 
 exports.isPasswordAndUserMatch = (req, res, next) => {
     UserModel.findByUsername(req.body.username)
-        .then((user)=>{
+        .then((user) => {
             if(!user[0]){
                 res.status(404).send({errors: 'User not found'});
             }else{

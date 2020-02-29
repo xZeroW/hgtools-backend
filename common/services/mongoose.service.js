@@ -14,7 +14,7 @@ const options = {
 
 const connectWithRetry = () => {
     console.log('MongoDB connection with retry');
-    mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/hgtools', options).then(()=>{
+    mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/hgtools', options).then(() => {
         console.log('MongoDB is connected');
     }).catch(() =>{
         console.log('MongoDB connection unsuccessful, retry after 5 seconds. ', ++count);

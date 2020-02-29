@@ -14,7 +14,7 @@ exports.insert = (req, res) => {
             errors.push('Field password is required');
         }
 
-        const regexEmail = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+        const regexEmail = new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
         const regexAlphanumeric = new RegExp(/^[A-Za-z0-9_]+$/i);
         if (!regexEmail.test(req.body.email)){
             errors.push('Invalid email format');
@@ -37,8 +37,8 @@ exports.insert = (req, res) => {
                 req.body.password = salt + '$' + hash;
                 req.body.role = 1;
                 UserModel.createUser(req.body)
-                    .then((result) => {
-                        res.status(201).send({ text: 'User created!' });
+                    .then(() => {
+                        res.status(201).send({ message: 'User created!' });
                     });
             }else{
                 res.status(409).send({ message: 'User already exists' });
@@ -77,7 +77,7 @@ exports.patchById = (req, res) => {
     }
 
     UserModel.patchUser(req.params.userId, req.body)
-        .then((result) => {
+        .then(() => {
             res.status(204).send({});
         });
 
@@ -85,7 +85,7 @@ exports.patchById = (req, res) => {
 
 exports.removeById = (req, res) => {
     UserModel.removeById(req.params.userId)
-        .then((result)=>{
+        .then(()=>{
             res.status(204).send({});
         });
 };

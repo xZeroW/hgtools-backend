@@ -9,8 +9,8 @@ exports.login = (req, res) => {
         let hash = crypto.createHmac('sha512', salt).update(refreshId).digest('base64');
         req.body.refreshKey = salt;
         let token = jwt.sign(req.body, jwtSecret);
-        let b = new Buffer.from(hash);
-        let refresh_token = b.toString('base64');
+        let BuffedHash = new Buffer.from(hash);
+        let refresh_token = BuffedHash.toString('base64');
         res.status(201).send({accessToken: token, refreshToken: refresh_token, username: req.body.username});
     } catch (err) {
         res.status(500).send({errors: err});
