@@ -2,90 +2,92 @@ const UserModel = require('../models/users.model');
 const crypto = require('crypto');
 
 exports.insert = (req, res) => {
-    let errors = [];
-    if (req.body) {
-        if (!req.body.username) {
-            errors.push('Field username is required');
-        }
-        if (!req.body.email) {
-            errors.push('Field email is required');
-        }
-        if (!req.body.password) {
-            errors.push('Field password is required');
-        }
-
-        const regexEmail = new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-        const regexAlphanumeric = new RegExp(/^[A-Za-z0-9_]+$/i);
-        if (!regexEmail.test(req.body.email)){
-            errors.push('Invalid email format');
-        }
-
-        if (!regexAlphanumeric.test(req.body.username)){
-            errors.push('Invalid username. Allowed characters: a-z, 0-9, _');
-        }
-
-        if (errors.length) {
-            return res.send({errors});
-        }
+  let errors = [];
+  if (req.body) {
+    if (!req.body.username) {
+      errors.push('Field username is required');
+    }
+    if (!req.body.email) {
+      errors.push('Field email is required');
+    }
+    if (!req.body.password) {
+      errors.push('Field password is required');
     }
 
-    UserModel.findByUsername(req.body.username)
-        .then((user)=>{
-            if(!user[0]){
-                let salt = crypto.randomBytes(16).toString('base64');
-                let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest('base64');
-                req.body.password = salt + '$' + hash;
-                req.body.role = 1;
-                UserModel.createUser(req.body)
-                    .then(() => {
-                        res.status(201).send({ message: 'User created!' });
-                    });
-            }else{
-                res.status(409).send({ message: 'User already exists' });
-            }
-        });  
+    const regexEmail = new RegExp(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+    const regexAlphanumeric = new RegExp(/^[A-Za-z0-9_]+$/i);
+    if (!regexEmail.test(req.body.email)) {
+      errors.push('Invalid email format');
+    }
+
+    if (!regexAlphanumeric.test(req.body.username)) {
+      errors.push('Invalid username. Allowed characters: a-z, 0-9, _');
+    }
+
+    if (errors.length) {
+      return res.send({ errors });
+    }
+  }
+
+  UserModel.findByUsername(req.body.username).then(user => {
+    if (!user[0]) {
+      let salt = crypto.randomBytes(16).toString('base64');
+      let hash = crypto
+        .createHmac('sha512', salt)
+        .update(req.body.password)
+        .digest('base64');
+      req.body.password = salt + '$' + hash;
+      req.body.role = 1;
+      UserModel.createUser(req.body).then(() => {
+        res.status(201).send({ message: 'User created!' });
+      });
+    } else {
+      res.status(409).send({ message: 'User already exists' });
+    }
+  });
 };
 
 exports.list = (req, res) => {
-    let limit = req.query.limit && req.query.limit <= 100 ? parseInt(req.query.limit) : 10;
-    let page = 0;
-    if (req.query) {
-        if (req.query.page) {
-            req.query.page = parseInt(req.query.page);
-            page = Number.isInteger(req.query.page) ? req.query.page : 0;
-        }
+  let limit =
+    req.query.limit && req.query.limit <= 100 ? parseInt(req.query.limit) : 10;
+  let page = 0;
+  if (req.query) {
+    if (req.query.page) {
+      req.query.page = parseInt(req.query.page);
+      page = Number.isInteger(req.query.page) ? req.query.page : 0;
     }
-    UserModel.list(limit, page)
-        .then((result) => {
-            delete result.password;
-            res.status(200).send(result);
-        });
+  }
+  UserModel.list(limit, page).then(result => {
+    delete result.password;
+    res.status(200).send(result);
+  });
 };
 
 exports.getById = (req, res) => {
-    UserModel.findById(req.params.userId)
-        .then((result) => {
-            res.status(200).send(result);
-        });
+  UserModel.findById(req.params.userId).then(result => {
+    res.status(200).send(result);
+  });
 };
 
 exports.patchById = (req, res) => {
-    if (req.body.password) {
-        let salt = crypto.randomBytes(16).toString('base64');
-        let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest('base64');
-        req.body.password = salt + '$' + hash;
-    }
+  if (req.body.password) {
+    let salt = crypto.randomBytes(16).toString('base64');
+    let hash = crypto
+      .createHmac('sha512', salt)
+      .update(req.body.password)
+      .digest('base64');
+    req.body.password = salt + '$' + hash;
+  }
 
-    UserModel.patchUser(req.params.userId, req.body)
-        .then(() => {
-            res.status(204).send({});
-        });
-
+  UserModel.patchUser(req.params.userId, req.body).then(() => {
+    res.status(204).send({});
+  });
 };
 
 exports.removeById = (req, res) => {
-    UserModel.removeById(req.params.userId)
-        .then(()=>{
-            res.status(204).send({});
-        });
+  UserModel.removeById(req.params.userId).then(() => {
+    res.status(204).send({});
+  });
 };
