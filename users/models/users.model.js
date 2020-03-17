@@ -6,7 +6,7 @@ const userSchema = new Schema({
   email: String,
   password: String,
   role: Number
-});
+}, { timestamps: true });
 
 userSchema.virtual('id').get(function() {
   return this._id.toHexString();

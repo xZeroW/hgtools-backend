@@ -38,7 +38,7 @@ exports.list = (req, res) => {
 };
 
 exports.getById = (req, res) => {
-  BuildModel.findById(req.params.userId).then(result => {
+  BuildModel.findById(req.params.buildId).then(result => {
     res.status(200).send(result);
   });
 };
@@ -53,13 +53,13 @@ exports.patchById = (req, res) => {
     req.body.password = salt + '$' + hash;
   }
 
-  BuildModel.patchUser(req.params.userId, req.body).then(() => {
+  BuildModel.patchUser(req.params.buildId, req.body).then(() => {
     res.status(204).send({});
   });
 };
 
 exports.removeById = (req, res) => {
-  BuildModel.removeById(req.params.userId).then(() => {
+  BuildModel.removeById(req.params.buildId).then(() => {
     res.status(204).send({});
   });
 };

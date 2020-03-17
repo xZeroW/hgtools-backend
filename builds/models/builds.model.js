@@ -36,7 +36,8 @@ exports.findByUserId = userId => {
 exports.findById = id => {
   return Build.findById(id).then(result => {
     result = result.toJSON();
-    delete result._id, result.__v; // exclude those fields
+    delete result._id;
+    delete result.__v; // exclude those fields
     return result;
   });
 };
@@ -58,7 +59,6 @@ exports.list = (perPage, page) => {
         if (err) {
           reject(err);
         } else {
-          console.log(builds);
           resolve(builds);
         }
       });

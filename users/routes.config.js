@@ -8,34 +8,34 @@ const ADMIN = config.roles.ADMIN;
 const FREE = config.roles.NORMAL_USER;
 
 exports.routesConfig = function (app) {
-    // create user
-    app.post('/users', [
-        UsersController.insert
-    ]);
-    // list users
-    app.get('/users', [
-        ValidationMiddleware.validJWTNeeded,
-        PermissionMiddleware.minimumRoleRequired(ADMIN),
-        UsersController.list
-    ]);
-    // get user
-    app.get('/users/:userId', [
-        ValidationMiddleware.validJWTNeeded,
-        PermissionMiddleware.minimumRoleRequired(FREE),
-        PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
-        UsersController.getById
-    ]);
-    // update user
-    app.patch('/users/:userId', [
-        ValidationMiddleware.validJWTNeeded,
-        PermissionMiddleware.minimumRoleRequired(FREE),
-        PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
-        UsersController.patchById
-    ]);
-    // delete user
-    app.delete('/users/:userId', [
-        ValidationMiddleware.validJWTNeeded,
-        PermissionMiddleware.minimumRoleRequired(ADMIN),
-        UsersController.removeById
-    ]);
+  // create user
+  app.post('/users', [
+    UsersController.insert
+  ]);
+  // list users
+  app.get('/users', [
+    ValidationMiddleware.validJWTNeeded,
+    PermissionMiddleware.minimumRoleRequired(ADMIN),
+    UsersController.list
+  ]);
+  // get user
+  app.get('/users/:userId', [
+    ValidationMiddleware.validJWTNeeded,
+    PermissionMiddleware.minimumRoleRequired(FREE),
+    PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
+    UsersController.getById
+  ]);
+  // update user
+  app.patch('/users/:userId', [
+    ValidationMiddleware.validJWTNeeded,
+    PermissionMiddleware.minimumRoleRequired(FREE),
+    PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
+    UsersController.patchById
+  ]);
+  // delete user
+  app.delete('/users/:userId', [
+    ValidationMiddleware.validJWTNeeded,
+    PermissionMiddleware.minimumRoleRequired(ADMIN),
+    UsersController.removeById
+  ]);
 };
