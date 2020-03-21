@@ -1,13 +1,14 @@
-const config = require('./common/config/env.config.js');
-
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const helmet = require('helmet');
 
+const config = require('./common/config/env.config.js');
 const AuthorizationRouter = require('./authorization/routes.config');
 const UsersRouter = require('./users/routes.config');
 const BuildsRouter = require('./builds/routes.config');
 
+app.use(helmet());
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Credentials', 'true');

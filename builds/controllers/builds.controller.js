@@ -53,7 +53,7 @@ exports.patchById = (req, res) => {
     req.body.password = salt + '$' + hash;
   }
 
-  BuildModel.patchUser(req.params.buildId, req.body).then(() => {
+  BuildModel.patchBuild(req.params.buildId, req.body).then(() => {
     res.status(204).send({});
   });
 };

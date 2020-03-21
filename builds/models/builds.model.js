@@ -84,7 +84,7 @@ exports.patchBuild = (id, buildData) => {
 
 exports.removeById = buildId => {
   return new Promise((resolve, reject) => {
-    Build.remove({ _id: buildId }, err => {
+    Build.deleteOne({ _id: buildId }, err => {
       if (err) {
         reject(err);
       } else {
