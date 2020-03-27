@@ -34,12 +34,14 @@ exports.findByUserId = userId => {
 };
 
 exports.findById = id => {
-  return Build.findById(id).then(result => {
-    result = result.toJSON();
-    delete result._id;
-    delete result.__v; // exclude those fields
-    return result;
-  });
+  return Build.findById(id)
+    .populate('creator', '-password -__v')  
+    .then(result => {
+      result = result.toJSON();
+      delete result._id;
+      delete result.__v; // exclude those fields
+      return result;
+    });
 };
 
 exports.createBuild = buildData => {
