@@ -52,7 +52,7 @@ exports.createBuild = buildData => {
 exports.list = (perPage, page) => {
   return new Promise((resolve, reject) => {
     Build.find()
-      // .sort({ _id: -1 }) - to sort of the latest
+      .sort({ _id: -1 }) // sort from the latest
       .select('-__v')
       .limit(perPage)
       .skip(perPage * page)

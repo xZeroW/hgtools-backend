@@ -18,8 +18,8 @@ exports.insert = (req, res) => {
 
   req.body.creator = req.jwt.userId;
   BuildModel.createBuild(req.body).then((b) => {
-    console.log(typeof b.createdAt);
-    console.log(`${b.createdAt} ${req.jwt.username} posted a build. Id: ${b._id}`);
+    var date = new Date().toLocaleString();
+    console.log(`${date} ${req.jwt.username} posted a build. Id: ${b._id}`);
     res.status(201).send({ message: 'Build posted!' });
   });
 };
