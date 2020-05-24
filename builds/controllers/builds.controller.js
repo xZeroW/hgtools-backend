@@ -46,10 +46,18 @@ exports.getById = (req, res) => {
 };
 
 exports.patchById = (req, res) => {
-  if (req.body && req.body.title || req.body.content) {
-    continue;
-  } else {
-    res.status(400).send({ erro: 'title or content are required' });
+  let errors = [];
+  if (req.body) {
+    if (!req.body.title) {
+      errors.push('Field title is required');
+    }
+    if (!req.body.content) {
+      errors.push('Field content is required');
+    }
+
+    if (errors.length) {
+      return res.send({ errors });
+    }
   }
 
   if (req.body.password) {
