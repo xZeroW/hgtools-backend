@@ -47,17 +47,10 @@ exports.getById = (req, res) => {
 
 exports.patchById = (req, res) => {
   let errors = [];
-  if (req.body) {
-    if (!req.body.title) {
-      errors.push('Field title is required');
-    }
-    if (!req.body.content) {
-      errors.push('Field content is required');
-    }
-
-    if (errors.length) {
-      return res.send({ errors });
-    }
+  if (req.body.title || req.body.content) {
+    continue;
+  } else {
+    res.status(400).send({ erro: 'title or content are required' });
   }
 
   if (req.body.password) {
@@ -70,12 +63,12 @@ exports.patchById = (req, res) => {
   }
 
   BuildModel.patchBuild(req.params.buildId, req.body).then(() => {
-    res.status(204).send({});
+    res.status(200).send({});
   });
 };
 
 exports.removeById = (req, res) => {
   BuildModel.removeById(req.params.buildId).then(() => {
-    res.status(204).send({});
+    res.status(200).send({});
   });
 };
