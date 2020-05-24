@@ -46,8 +46,7 @@ exports.getById = (req, res) => {
 };
 
 exports.patchById = (req, res) => {
-  let errors = [];
-  if (req.body.title || req.body.content) {
+  if (req.body && req.body.title || req.body.content) {
     continue;
   } else {
     res.status(400).send({ erro: 'title or content are required' });
